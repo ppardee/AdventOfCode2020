@@ -8,31 +8,17 @@ import (
 	"strconv"
 )
 
+const target int = 2020
+
 func findTwo() {
-	const target int = 2020
-	file, _ := os.Open("input.txt")
-	reader := bufio.NewReader(file)
-	scanner := bufio.NewScanner(reader)
 
-	var numbers []int
+	scanner := getScanner("input.txt")
 
-	for scanner.Scan() {
-		t := scanner.Text()
-		n, err := strconv.ParseInt(t, 0, 0)
-		if err != nil {
-			panic(err)
-		}
-		numbers = append(numbers, int(n))
-	}
+	numbers := getSortedInput(scanner)
 
-	sort.Ints(numbers)
-
-	length := len(numbers)
-	split := length / 2.0
-	fmt.Printf("There are %v numbers, and half of that is %v\n", length, split)
 	fmt.Println(numbers)
 
-	highIdx := length - 1
+	highIdx := len(numbers) - 1
 	lowIdx := 0
 
 top:
@@ -66,24 +52,10 @@ top:
 	fmt.Printf("The product of these numbers is %v\n", numbers[lowIdx]*numbers[highIdx])
 }
 
-func main() {
-	const target int = 2020
-	file, _ := os.Open("input.txt")
-	reader := bufio.NewReader(file)
-	scanner := bufio.NewScanner(reader)
+func findThree() {
+	scanner := getScanner("input.txt")
 
-	var numbers []int
-
-	for scanner.Scan() {
-		t := scanner.Text()
-		n, err := strconv.ParseInt(t, 0, 0)
-		if err != nil {
-			panic(err)
-		}
-		numbers = append(numbers, int(n))
-	}
-
-	sort.Ints(numbers)
+	numbers := getSortedInput(scanner)
 
 	fmt.Println(numbers)
 
@@ -118,4 +90,30 @@ top:
 
 	fmt.Printf("The three numbers are %v, %v and %v\n", numbers[lowIdx], numbers[midIdx], numbers[highIdx])
 	fmt.Printf("The product of these numbers is %v\n", numbers[lowIdx]*numbers[midIdx]*numbers[highIdx])
+}
+
+func main() {
+	findThree()
+}
+
+func getScanner(fileName string) *bufio.Scanner {
+	file, _ := os.Open(fileName)
+	reader := bufio.NewReader(file)
+	return bufio.NewScanner(reader)
+}
+
+func getSortedInput(scanner *bufio.Scanner) []int {
+	var numbers []int
+
+	for scanner.Scan() {
+		t := scanner.Text()
+		n, err := strconv.ParseInt(t, 0, 0)
+		if err != nil {
+			panic(err)
+		}
+		numbers = append(numbers, int(n))
+	}
+
+	sort.Ints(numbers)
+	return numbers
 }
